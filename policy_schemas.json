@@ -1,0 +1,30 @@
+{
+  "SIS": {
+    "vars": {
+      "role": "String",
+      "action": "String",
+      "owner": "Bool"
+    }
+  },
+  "Exam": {
+    "vars": {
+      "create": "Bool",
+      "grade": "Bool",
+      "approve": "Bool"
+    }
+  },
+  "Lab": {
+    "vars": {
+      "system": "String",
+      "on_campus": "Bool",
+      "hour": "Int"
+    }
+  },
+  "Privacy": {
+    "vars": {
+      "role": "String",
+      "status": "String",
+      "access_requested": "Bool"
+    }
+  }
+}
