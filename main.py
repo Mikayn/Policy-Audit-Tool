@@ -8,3 +8,14 @@ from rich.panel import Panel                                                # ty
 from rich import box                                                        # type: ignore
 
 console = Console()
+POLICY_FILE = "policies.json"
+
+# =========================
+# LOAD / SAVE POLICIES
+# =========================
+
+def load_policy_schemas(filepath="policy_schemas.json"):
+    with open(filepath, "r") as f:
+        return json.load(f)
+
+policy_schemas = load_policy_schemas()
