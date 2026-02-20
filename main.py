@@ -97,3 +97,44 @@ def evaluate_policy(policy):
         return bool(model[allowed])
     return False
 
+# =========================
+# USER INTERACTING PARTS
+# =========================
+
+def add_policy():
+    policy_type = Prompt.ask("Policy type", choices=["SIS","Exam","Lab","Privacy"])
+
+    while True:
+        policy_id = Prompt.ask("Policy ID (unique)")
+        if policy_id in policies:
+            console.print(Panel(f"[bold red]Policy ID '{policy_id}' already exists![/bold red]\nPlease choose a different ID.", border_style="red"))
+            continue  # retry
+        break
+
+    policy = {"type": policy_type}
+
+    if policy_type == "SIS":
+        policy["role"] = Prompt.ask("Role", choices=["student","faculty","admin"])
+        policy["action"] = Prompt.ask("Action", choices=["view","edit"])
+        policy["owner"] = Confirm.ask("Is Owner of Record?")
+
+    elif policy_type == "Exam":
+        policy["create"] = Confirm.ask("Can Create Exam?")
+        policy["grade"] = Confirm.ask("Can Grade Exam?")
+        policy["invigilate"] = Confirm.ask("Can Invigilate Exam?")
+
+    elif policy_type == "Lab":
+        policy["system"] = Prompt.ask("System", choices=["lab_pc","server"])
+        policy["on_campus"] = Confirm.ask("On Campus IP?")
+        policy["hour"] = int(Prompt.ask("Hour (0-23)"))
+
+    elif policy_type == "Privacy":
+        policy["role"] = Prompt.ask("Role", choices=["student", "faculty", "admin", "registrar"])
+        policy["status"] = Prompt.ask("Status", choices=["enrolled", "graduated"])
+        policy["action"] = Prompt.ask("Action",choices=["view", "edit", "delete"])
+        policy["access_requested"] = Confirm.ask("Access Requested?")
+
+
+    policies[policy_id] = policy
+    save_policies(policies)
+    console.print(Panel(f"Policy {policy_id} added.", border_style="green"))
