@@ -17,5 +17,17 @@ POLICY_FILE = "policies.json"
 def load_policy_schemas(filepath="policy_schemas.json"):
     with open(filepath, "r") as f:
         return json.load(f)
+    
+def load_policies():
+    try:
+        with open(POLICY_FILE, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+    
+def save_policies(policies):
+    with open(POLICY_FILE, "w") as f:
+        json.dump(policies, f, indent=2)
 
+policies = load_policies()
 policy_schemas = load_policy_schemas()
