@@ -144,6 +144,7 @@ def delete_policy():
         console.print(Panel("[bold yellow]No policies to delete.[/bold yellow]"))
         return
 
+    display_policy_list()
     policy_id = Prompt.ask("Enter Policy ID to delete")
     if policy_id in policies:
         confirm = Confirm.ask(f"Are you sure you want to delete policy '{policy_id}'?")
@@ -153,3 +154,19 @@ def delete_policy():
             console.print(Panel(f"Policy '{policy_id}' deleted.", border_style="red"))
     else:
         console.print(Panel(f"[bold red]Policy ID '{policy_id}' not found.[/bold red]"))
+
+
+# =========================
+# CLI DISPLAYING PARTS
+# =========================
+
+def display_policy_list():
+    table = Table(title="Policy List", box=box.ROUNDED)
+    table.add_column("ID", style="cyan")
+    table.add_column("Type", style="magenta")
+    table.add_column("Details", style="white")
+    for key, val in policies.items():
+        table.add_row(key, val["type"], str(val))
+    console.print(table)
+
+add_policy()
