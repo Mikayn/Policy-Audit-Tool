@@ -138,3 +138,18 @@ def add_policy():
     policies[policy_id] = policy
     save_policies(policies)
     console.print(Panel(f"Policy {policy_id} added.", border_style="green"))
+
+def delete_policy():
+    if not policies:
+        console.print(Panel("[bold yellow]No policies to delete.[/bold yellow]"))
+        return
+
+    policy_id = Prompt.ask("Enter Policy ID to delete")
+    if policy_id in policies:
+        confirm = Confirm.ask(f"Are you sure you want to delete policy '{policy_id}'?")
+        if confirm:
+            del policies[policy_id]
+            save_policies(policies)
+            console.print(Panel(f"Policy '{policy_id}' deleted.", border_style="red"))
+    else:
+        console.print(Panel(f"[bold red]Policy ID '{policy_id}' not found.[/bold red]"))
