@@ -55,7 +55,7 @@ def sis_rule():
            False)))
 
 def exam_rule():
-    pass
+    return Not(And(vars["create"], vars["grade"], vars["invigilate"]))
 
 def lab_rule():
     pass
