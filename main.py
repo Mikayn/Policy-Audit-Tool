@@ -65,7 +65,25 @@ def lab_rule():
                   True))
 
 def privacy_rule():
-    pass
+    return If(
+        Not(vars["access_requested"]),
+        True,  # no access requested → allowed
+        If(
+            vars["status"] != StringVal("graduated"),
+            True,  # normal privacy rules don’t restrict
+            If(
+                Or(vars["role"] == StringVal("admin"),
+                   vars["role"] == StringVal("registrar")),
+                True,  # full authority
+                If(
+                    And(vars["role"] == StringVal("faculty"),
+                        vars["action"] == StringVal("view")),
+                    True,  # limited read-only access
+                    False  # default deny
+                )
+            )
+        )
+    )
 
 RULE_MAP = {
     "SIS": sis_rule,
