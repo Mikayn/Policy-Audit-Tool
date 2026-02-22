@@ -186,6 +186,16 @@ def delete_policy():
     else:
         console.print(Panel(f"[bold red]Policy ID '{policy_id}' not found.[/bold red]"))
 
+def check_policy():
+    display_policy_list()
+    policy_id = Prompt.ask("Enter Policy ID to evaluate")
+    if policy_id in policies:
+        result = evaluate_policy(policies[policy_id])
+        color = "green" if result else "red"
+        status = "ALLOWED" if result else "DENIED"
+        console.print(Panel(f"[bold]{status}[/bold]\n\n{policies[policy_id]}", border_style=color))
+    else:
+        console.print("[bold red]Policy ID not found[/bold red]")
 
 # =========================
 # CLI DISPLAYING PARTS
@@ -200,4 +210,4 @@ def display_policy_list():
         table.add_row(key, val["type"], str(val))
     console.print(table)
 
-add_policy()
+check_policy()
