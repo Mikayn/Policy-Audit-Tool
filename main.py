@@ -210,4 +210,35 @@ def display_policy_list():
         table.add_row(key, val["type"], str(val))
     console.print(table)
 
-check_policy()
+def main():
+    while True:
+        console.print("\n[bold yellow]College Policy Audit Tool[/bold yellow]")
+
+        table = Table(box=box.ROUNDED)
+        table.add_column("Option", style="cyan")
+        table.add_column("Action", style="white")
+        table.add_row("1", "List all policies")
+        table.add_row("2", "Add new policy")
+        table.add_row("3", "Delete a policy")
+        table.add_row("4", "Check single policy")
+        table.add_row("0", "Exit")
+
+        console.print(table)
+
+        choice = Prompt.ask("Select Option", choices=["1","2","3","4","0"])
+        if choice == "1":
+            display_policy_list()
+            time.sleep(4)
+        elif choice == "2":
+            add_policy()
+        elif choice == "3":
+            delete_policy()
+        elif choice == "4":
+            check_policy()
+            time.sleep(3)
+        elif choice == "0":
+            console.print("[bold]Exiting...[/bold]")
+            break
+
+if __name__ == "__main__":
+    main()
