@@ -43,7 +43,16 @@ policy_schemas = load_policy_schemas()
 # =========================
 
 def sis_rule():
-    pass
+    return If(vars["role"] == StringVal("admin"), True,
+           If(And(vars["role"] == StringVal("faculty"),
+                  Or(vars["action"] == StringVal("view"),
+                     vars["action"] == StringVal("edit")),
+                  vars["owner"]), True,
+           If(And(vars["role"] == StringVal("student"),
+                  Or(vars["action"] == StringVal("view"),
+                     vars["action"] == StringVal("edit")),
+                  vars["owner"]), True,
+           False)))
 
 def exam_rule():
     pass
