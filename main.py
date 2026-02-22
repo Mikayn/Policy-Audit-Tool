@@ -58,7 +58,11 @@ def exam_rule():
     return Not(And(vars["create"], vars["grade"], vars["invigilate"]))
 
 def lab_rule():
-    pass
+    return And(vars["hour"] >= 8,
+               vars["hour"] <= 20,
+               If(vars["system"] == StringVal("server"),
+                  vars["on_campus"],
+                  True))
 
 def privacy_rule():
     pass
