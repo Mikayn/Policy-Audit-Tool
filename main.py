@@ -6,9 +6,10 @@ from rich.prompt import Prompt, Confirm                                     # ty
 from rich.table import Table                                                # type: ignore
 from rich.panel import Panel                                                # type: ignore
 from rich import box                                                        # type: ignore
+import os
+import sys
 
 console = Console()
-POLICY_FILE = "policies.json"
 
 Z3_TYPE_MAP = {
     "String": String,
@@ -20,19 +21,30 @@ Z3_TYPE_MAP = {
 # LOAD / SAVE POLICIES
 # =========================
 
-def load_policy_schemas(filepath="policy_schemas.json"):
-    with open(filepath, "r") as f:
+def resource_path(relative_path):
+    """Get absolute path to resource (works for dev and for PyInstaller)."""
+    if hasattr(sys, '_MEIPASS'):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+def load_policy_schemas():
+    path = resource_path("policy_schemas.json")
+    with open(path, "r") as f:
         return json.load(f)
     
 def load_policies():
+    path = resource_path("policies.json")
     try:
-        with open(POLICY_FILE, "r") as f:
+        with open(path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
     
 def save_policies(policies):
-    with open(POLICY_FILE, "w") as f:
+    path = resource_path("policies.json")
+    with open(path, "w") as f:
         json.dump(policies, f, indent=2)
 
 policies = load_policies()
@@ -42,7 +54,7 @@ policy_schemas = load_policy_schemas()
 # Z3 EVALUATION PARTS
 # =========================
 
-def sis_rule():
+def sis_rule(vars):
     return If(vars["role"] == StringVal("admin"), True,
            If(And(vars["role"] == StringVal("faculty"),
                   Or(vars["action"] == StringVal("view"),
@@ -54,17 +66,17 @@ def sis_rule():
                   vars["owner"]), True,
            False)))
 
-def exam_rule():
+def exam_rule(vars):
     return Not(And(vars["create"], vars["grade"], vars["invigilate"]))
 
-def lab_rule():
+def lab_rule(vars):
     return And(vars["hour"] >= 8,
                vars["hour"] <= 20,
                If(vars["system"] == StringVal("server"),
                   vars["on_campus"],
                   True))
 
-def privacy_rule():
+def privacy_rule(vars):
     return If(
         Not(vars["access_requested"]),
         True,  # no access requested → allowed

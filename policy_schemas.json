@@ -10,7 +10,7 @@
     "vars": {
       "create": "Bool",
       "grade": "Bool",
-      "approve": "Bool"
+      "invigilate": "Bool"
     }
   },
   "Lab": {
