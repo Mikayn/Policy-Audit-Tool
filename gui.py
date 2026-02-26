@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import main as m  # your CLI logic
+import main as m  
 
 # =========================
 # MAIN WINDOW

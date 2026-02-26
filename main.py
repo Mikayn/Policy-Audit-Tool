@@ -22,7 +22,7 @@ Z3_TYPE_MAP = {
 # =========================
 
 def resource_path(relative_path):
-    """Get absolute path to resource (works for dev and for PyInstaller)."""
+    """Get absolute path to resource."""
     if hasattr(sys, '_MEIPASS'):
         base_path = sys._MEIPASS
     else:
