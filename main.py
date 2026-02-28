@@ -159,7 +159,7 @@ def add_policy():
 
     if policy_type == "SIS":
         policy["role"] = Prompt.ask("Role", choices=["student","faculty","admin"])
-        policy["action"] = Prompt.ask("Action", choices=["view","edit"])
+        policy["action"] = Prompt.ask("Action", choices=["view","edit", "delete"])
         policy["owner"] = Confirm.ask("Is Owner of Record?")
 
     elif policy_type == "Exam":
