@@ -1,4 +1,4 @@
-# College Policy Audit Tool 
+# Policy Audit Tool 
 
 A formal policy verification system built using Python and constraint solving.  
 This project demonstrates how logical satisfiability checking can be used to evaluate institutional access control policies.
