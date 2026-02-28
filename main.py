@@ -60,8 +60,7 @@ def sis_rule(vars):
                 Or(vars["action"] == StringVal("view"),
                     vars["action"] == StringVal("edit"))), True,
         If(And(vars["role"] == StringVal("student"),
-                Or(vars["action"] == StringVal("view"),
-                    vars["action"] == StringVal("edit")),
+                vars["action"] == StringVal("view"),
                 vars["owner"]), True,
         False)))
 
