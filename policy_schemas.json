@@ -24,6 +24,7 @@
     "vars": {
       "role": "String",
       "status": "String",
+      "owner": "Bool",
       "access_requested": "Bool"
     }
   }

@@ -56,15 +56,14 @@ policy_schemas = load_policy_schemas()
 
 def sis_rule(vars):
     return If(vars["role"] == StringVal("admin"), True,
-           If(And(vars["role"] == StringVal("faculty"),
-                  Or(vars["action"] == StringVal("view"),
-                     vars["action"] == StringVal("edit")),
-                  vars["owner"]), True,
-           If(And(vars["role"] == StringVal("student"),
-                  Or(vars["action"] == StringVal("view"),
-                     vars["action"] == StringVal("edit")),
-                  vars["owner"]), True,
-           False)))
+        If(And(vars["role"] == StringVal("faculty"),
+                Or(vars["action"] == StringVal("view"),
+                    vars["action"] == StringVal("edit"))), True,
+        If(And(vars["role"] == StringVal("student"),
+                Or(vars["action"] == StringVal("view"),
+                    vars["action"] == StringVal("edit")),
+                vars["owner"]), True,
+        False)))
 
 def exam_rule(vars):
     return Not(And(vars["create"], vars["grade"], vars["invigilate"]))
@@ -79,19 +78,21 @@ def lab_rule(vars):
 def privacy_rule(vars):
     return If(
         Not(vars["access_requested"]),
-        True,  # no access requested → allowed
+        True,
         If(
-            vars["status"] != StringVal("graduated"),
-            True,  # normal privacy rules don’t restrict
+            Or(vars["role"] == StringVal("admin"),
+            vars["role"] == StringVal("registrar")),
+            True,
             If(
-                Or(vars["role"] == StringVal("admin"),
-                   vars["role"] == StringVal("registrar")),
-                True,  # full authority
+                And(vars["role"] == StringVal("faculty"),
+                    vars["status"] != StringVal("graduated")),
+                True,
                 If(
-                    And(vars["role"] == StringVal("faculty"),
-                        vars["action"] == StringVal("view")),
-                    True,  # limited read-only access
-                    False  # default deny
+                    And(vars["role"] == StringVal("student"),
+                        vars["owner"],
+                        vars["status"] != StringVal("graduated")),
+                    True,
+                    False
                 )
             )
         )
@@ -174,7 +175,7 @@ def add_policy():
     elif policy_type == "Privacy":
         policy["role"] = Prompt.ask("Role", choices=["student", "faculty", "admin", "registrar"])
         policy["status"] = Prompt.ask("Status", choices=["enrolled", "graduated"])
-        policy["action"] = Prompt.ask("Action",choices=["view", "edit", "delete"])
+        policy["owner"] = Confirm.ask("Is Owner of Record?")
         policy["access_requested"] = Confirm.ask("Access Requested?")
 
 
